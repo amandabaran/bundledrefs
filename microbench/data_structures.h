@@ -147,8 +147,8 @@ using namespace bst_ns;
   cout << "sizes: node=" << (sizeof(node_t<test_type, test_type>)) << endl;
 
 #elif defined(LAZYLIST)
-#include "lazylist_impl.h"
 #include "record_manager.h"
+#include "lazylist_impl.h"
 
 #define DS_DECLARATION lazylist<test_type, test_type, MEMMGMT_T>
 #define MEMMGMT_T \
