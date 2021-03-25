@@ -15,12 +15,14 @@
 inline uint64_t get_server_clock() {
 #if defined(__i386__)
     uint64_t ret;
-    __asm__ __volatile__("rdtsc" : "=A" (ret));
+    __asm__ __volatile__("rdtscp" : "=A" (ret));
 #elif defined(__x86_64__)
     unsigned hi, lo;
-    __asm__ __volatile__ ("rdtsc" : "=a"(lo), "=d"(hi));
+    //NOTE: if we want to save the value of the CPU cores to identify them, see code here:
+    //https://stackoverflow.com/questions/14783782/which-inline-assembly-code-is-correct-for-rdtscp
+    __asm__ __volatile__ ("rdtscp" : "=a"(lo), "=d"(hi) :: "%ecx");
     uint64_t ret = ( (uint64_t)lo)|( ((uint64_t)hi)<<32 );
-        ret = (uint64_t) ((double)ret / CPU_FREQ_GHZ);
+        ret = (uint64_t) ((double)ret / CPU_FREQ_GHZ); 
 #else 
         timespec * tp = new timespec;
     clock_gettime(CLOCK_REALTIME, tp);
